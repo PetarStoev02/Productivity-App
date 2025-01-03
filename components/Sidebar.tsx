@@ -3,19 +3,20 @@
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Calendar, ListTodo, Settings, PieChart } from "lucide-react";
+import { Calendar, ListTodo, Settings, PieChart, DollarSign } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface SidebarProps {
-  className?: string;
-}
 
 const MENU_ITEMS = [
   { icon: Calendar, label: "Calendar", path: "/" },
   { icon: ListTodo, label: "Tasks", path: "/tasks" },
+  { icon: DollarSign, label: "Finances", path: "/finances" },
   { icon: PieChart, label: "Statistics", path: "/statistics" },
   { icon: Settings, label: "Settings", path: "/settings" }
 ];
+
+interface SidebarProps {
+  className?: string;
+}
 
 export function Sidebar({ className }: SidebarProps) {
   const router = useRouter();

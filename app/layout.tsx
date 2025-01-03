@@ -2,8 +2,9 @@
 
 import './globals.css';
 import { CalendarCheck2 } from "lucide-react";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/Sidebar";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { Providers } from "./providers";
 
 export default function RootLayout({
   children,
@@ -13,17 +14,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           <main className="h-screen w-screen overflow-hidden">
             <div className="flex flex-col h-full">
-              <header className="flex items-center gap-2 p-4 border-b">
-                <CalendarCheck2 className="h-6 w-6 text-primary" />
-                <h1 className="text-2xl font-bold">Yearly Goal Tracker</h1>
+              <header className="flex items-center justify-between p-4 border-b">
+                <div className="flex items-center gap-2">
+                  <CalendarCheck2 className="h-6 w-6 text-primary" />
+                  <h1 className="text-2xl font-bold">Yearly Goal Tracker</h1>
+                </div>
+                <ThemeToggle />
               </header>
               <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
@@ -33,7 +32,7 @@ export default function RootLayout({
               </div>
             </div>
           </main>
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
