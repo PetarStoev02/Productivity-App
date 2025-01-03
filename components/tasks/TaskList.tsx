@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { format } from "date-fns";
 import { useTasks } from "@/hooks/useTasks";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,7 @@ export function TaskList() {
       addTask({
         title: newTask.trim(),
         isDaily: true,
-        completed: false
+        completed: false,
       });
       setNewTask("");
     }
@@ -48,7 +47,13 @@ export function TaskList() {
                 checked={task.completed}
                 onCheckedChange={() => toggleTask(task.id)}
               />
-              <span className={task.completed ? "line-through text-muted-foreground flex-1" : "flex-1"}>
+              <span
+                className={
+                  task.completed
+                    ? "line-through text-muted-foreground flex-1"
+                    : "flex-1"
+                }
+              >
                 {task.title}
               </span>
               <Button
