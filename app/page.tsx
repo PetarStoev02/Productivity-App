@@ -12,7 +12,7 @@ export default function Home() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <main className="h-screen w-screen overflow-hidden">
+    <main className="h-screen max-w-screen overflow-hidden">
       <div className="flex flex-col h-full">
         <header className="flex items-center gap-2 p-4 border-b">
           <CalendarCheck2 className="h-6 w-6 text-primary" />
