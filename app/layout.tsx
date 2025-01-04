@@ -1,10 +1,36 @@
-"use client";
-
-import './globals.css';
+import "./globals.css";
+import type { Metadata } from "next";
+import { Montserrat } from 'next/font/google';
 import { CalendarCheck2 } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Providers } from "./providers";
+import faviconIcon from "../public/Favicon Icon.png";
+
+const montserrat = Montserrat({ subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: "Productiven - Goal Tracker",
+  description:
+    "",
+  metadataBase: new URL("https://productiven.org"),
+  alternates: {
+    canonical: "/",
+  },
+  icons: {
+    icon: {
+      url: faviconIcon.src,
+      href: faviconIcon.src,
+    },
+  },
+  openGraph: {
+    title: "Productiven",
+    description: "Productiven - Goal Tracker",
+    siteName: "Productiven",
+    locale: "bg_BG",
+    type: "website",
+  },
+};
 
 export default function RootLayout({
   children,
@@ -12,8 +38,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="bg" suppressHydrationWarning>
+      <body className={montserrat.className}>
         <Providers>
           <main className="h-screen w-screen overflow-hidden">
             <div className="flex flex-col h-full">
@@ -26,9 +52,7 @@ export default function RootLayout({
               </header>
               <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
-                <div className="flex-1 overflow-auto">
-                  {children}
-                </div>
+                <div className="flex-1 overflow-auto">{children}</div>
               </div>
             </div>
           </main>

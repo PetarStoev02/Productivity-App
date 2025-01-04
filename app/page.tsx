@@ -3,9 +3,13 @@
 import { useState } from "react";
 import { YearlyCalendar } from "@/components/YearlyCalendar";
 import { DayGoals } from "@/components/DayGoals";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { CalendarCheck2 } from "lucide-react";
-import { Sidebar } from "@/components/Sidebar";
 
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -18,12 +22,11 @@ export default function Home() {
           <CalendarCheck2 className="h-6 w-6 text-primary" />
           <h1 className="text-2xl font-bold">Yearly Goal Tracker</h1>
         </header>
-        
+
         <div className="flex flex-1 overflow-hidden">
-     
           <div className="flex-1">
-            <YearlyCalendar 
-              selectedDate={selectedDate} 
+            <YearlyCalendar
+              selectedDate={selectedDate}
               onSelectDate={(date) => {
                 setSelectedDate(date);
                 setIsOpen(true);
