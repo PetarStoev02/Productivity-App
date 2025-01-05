@@ -8,7 +8,7 @@ import { Calendar, ListTodo, Settings, PieChart, DollarSign, ChevronLeft, Chevro
 import { cn } from "@/lib/utils";
 
 const MENU_ITEMS = [
-  { icon: Calendar, label: "Calendar", path: "/" },
+  { icon: Calendar, label: "Calendar", path: "/dashboard" },
   { icon: ListTodo, label: "Tasks", path: "/tasks" },
   { icon: DollarSign, label: "Finances", path: "/finances" },
   { icon: PieChart, label: "Statistics", path: "/statistics" },
