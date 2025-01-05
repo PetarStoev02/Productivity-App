@@ -26,7 +26,7 @@ export function LoginForm() {
     
     try {
     //   await login(formData);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       toast({
         title: "Грешка",

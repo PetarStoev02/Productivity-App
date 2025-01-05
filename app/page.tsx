@@ -1,78 +1,61 @@
 "use client";
+
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, CheckCircle2, Calendar } from "lucide-react";
+import { CalendarCheck2, Target, LineChart, Clock } from "lucide-react";
 
-export default function HomePage() {
+export default function LandingPage() {
+  const router = useRouter();
+
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen">
-      {/* Header Section */}
-      <header className="w-full  shadow-md sticky top-0 z-10">
-        <nav className="container mx-auto flex items-center justify-between p-6">
-          <Link href="/" className="text-2xl font-extrabold tracking-tight">
-            Productivity<span className="text-gray-500">App</span>
-          </Link>
-          <div className="flex gap-4">
-            <Link href="/login">
-              <Button
-                variant="ghost"
-                className="text-gray-400 hover:text-white"
-              >
-                Login
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button className="bg-gray-700 hover:bg-gray-600 text-white">
-                Register
-              </Button>
-            </Link>
+    <div className="min-h-screen bg-background pt-16">
+      <div className="container mx-auto px-4 py-16">
+        {/* Hero Section */}
+        <div className="text-center mb-16">
+          <div className="flex justify-center mb-4">
+            <CalendarCheck2 className="h-16 w-16 text-primary" />
           </div>
-        </nav>
-      </header>
-
-      {/* Hero Section */}
-      <section className="container mx-auto text-center py-20">
-        <h1 className="text-5xl font-bold mb-6">Elevate Your Productivity</h1>
-        <p className="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
-          Discover a smarter way to manage tasks, set goals, and track progress.
-          Make every moment count.
-        </p>
-        <div className="flex justify-center gap-4">
-          <Link href="/register">
-            <Button className="px-10 py-4 text-lg bg-gray-700 text-white hover:bg-gray-600 shadow-lg">
+          <h1 className="text-4xl font-bold mb-4">Yearly Goal Tracker</h1>
+          <p className="text-xl text-muted-foreground mb-8">
+            Track your goals, manage finances, and achieve more throughout the year
+          </p>
+          <div className="flex gap-4 justify-center">
+            <Button size="lg" onClick={() => router.push("/register")}>
               Get Started
             </Button>
-          </Link>
-          <Link href="/features">
-            <Button
-              variant="outline"
-              className="px-10 py-4 text-lg text-gray-400 border-gray-600 hover:bg-neutral-800"
-            >
-              Learn More
+            <Button size="lg" variant="outline" onClick={() => router.push("/login")}>
+              Sign In
             </Button>
-          </Link>
-        </div>
-      </section>
-
-     
-
-      {/* Footer Section */}
-      <footer className="w-full bg-neutral-900 py-6">
-        <div className="container mx-auto text-center">
-          <p className="text-sm text-gray-400">
-            &copy; 2025 ProductivityApp. All rights reserved.
-          </p>
-          <div className="flex justify-center gap-4 mt-4">
-            <Link href="/privacy" className="text-gray-500 hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="text-gray-500 hover:text-white">
-              Terms of Service
-            </Link>
           </div>
         </div>
-      </footer>
-    </main>
+
+        {/* Features Grid */}
+        <div id="features" className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="p-6 rounded-lg border bg-card">
+            <Target className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Goal Tracking</h3>
+            <p className="text-muted-foreground">
+              Set and track your daily, weekly, and yearly goals with our intuitive calendar interface
+            </p>
+          </div>
+          
+          <div className="p-6 rounded-lg border bg-card">
+            <LineChart className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Finance Management</h3>
+            <p className="text-muted-foreground">
+              Keep track of your income, expenses, and savings with detailed charts and analytics
+            </p>
+          </div>
+          
+          <div className="p-6 rounded-lg border bg-card">
+            <Clock className="h-12 w-12 text-primary mb-4" />
+            <h3 className="text-xl font-semibold mb-2">Progress Tracking</h3>
+            <p className="text-muted-foreground">
+              Monitor your progress with statistics and visualizations to stay motivated
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

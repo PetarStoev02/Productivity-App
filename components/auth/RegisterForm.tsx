@@ -37,7 +37,7 @@ export function RegisterForm() {
 
     try {
     //   await register(formData);
-      router.push("/");
+      router.push("/dashboard");
     } catch (error) {
       toast({
         title: "Грешка",
