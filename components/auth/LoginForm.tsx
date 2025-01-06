@@ -25,9 +25,29 @@ export function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    const { email, password } = formData;
+
+    // Form validation
+    if (!email || !password) {
+      toast({
+        title: "Грешка при вход",
+        description: "Моля, попълнете всички полета",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!email.includes('@')) {
+      toast({
+        title: "Грешка при вход",
+        description: "Моля, въведете валиден имейл адрес",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
-      const { email, password } = formData;
       await login({ email, password });
       
       toast({
@@ -35,30 +55,14 @@ export function LoginForm() {
         description: "Добре дошли отново!",
       });
       
-      // Add a small delay before navigation
       setTimeout(() => {
         router.replace('/dashboard');
       }, 100);
     } catch (error: any) {
-      console.error('Login error:', error);
-      let errorMessage;
-      switch (error?.code) {
-        case 'auth/invalid-email':
-          errorMessage = 'Невалиден имейл адрес';
-          break;
-        case 'auth/user-not-found':
-        case 'auth/wrong-password':
-          errorMessage = 'Невалиден имейл или парола';
-          break;
-        case 'auth/too-many-requests':
-          errorMessage = 'Твърде много опити. Моля, опитайте по-късно';
-          break;
-        default:
-          errorMessage = 'Възникна грешка. Моля, опитайте отново';
-      }
-
+      const errorMessage = getAuthError(error);
+      
       toast({
-        title: "Грешка при влизане",
+        title: "Грешка при вход",
         description: errorMessage,
         variant: "destructive",
       });

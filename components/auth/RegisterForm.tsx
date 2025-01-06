@@ -27,9 +27,39 @@ export function RegisterForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    const { email, password, confirmPassword } = formData;
+
+    // Form validation
+    if (!email || !password || !confirmPassword) {
       toast({
-        title: "Грешка",
+        title: "Грешка при регистрация",
+        description: "Моля, попълнете всички полета",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!email.includes('@')) {
+      toast({
+        title: "Грешка при регистрация",
+        description: "Моля, въведете валиден имейл адрес",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      toast({
+        title: "Грешка при регистрация",
+        description: "Паролата трябва да бъде поне 6 символа",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast({
+        title: "Грешка при регистрация",
         description: "Паролите не съвпадат",
         variant: "destructive",
       });
@@ -37,17 +67,21 @@ export function RegisterForm() {
     }
 
     try {
-      await register(formData);
+      await register({ email, password });
+      
       toast({
         title: "Успешна регистрация",
         description: "Добре дошли в Productiven!",
       });
-      router.push("/dashboard");
-      router.refresh();
+      
+      setTimeout(() => {
+        router.replace('/dashboard');
+      }, 100);
     } catch (error: any) {
       const errorMessage = getAuthError(error);
+      
       toast({
-        title: "Грешка",
+        title: "Грешка при регистрация",
         description: errorMessage,
         variant: "destructive",
       });
