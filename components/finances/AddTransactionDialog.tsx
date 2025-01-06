@@ -8,31 +8,58 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import { useFinances } from "@/hooks/useFinances";
+import { auth } from "@/lib/firebase";
+import { addTransaction as addTransactionToDb } from '@/services/database';
+import { useUser } from '@/contexts/UserContext';
+import type { NewTransaction } from '@/types/finance';
+import { useToast } from "@/hooks/use-toast";
 
 export function AddTransactionDialog() {
-  const { addTransaction, getCategories } = useFinances();
+  const { getCategories } = useFinances();
+  const { refreshUserData } = useUser();
+  const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
+  const [description, setDescription] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !amount || !category) return;
+    if (!title || !amount || !category || !auth.currentUser?.uid) return;
 
-    addTransaction({
+    const transactionData: NewTransaction = {
       title,
       amount: Number(amount),
       type,
       category,
+      description: description || title,
       date: new Date().toISOString(),
-    });
+    };
 
-    setTitle('');
-    setAmount('');
-    setCategory('');
-    setOpen(false);
+    try {
+      await addTransactionToDb(auth.currentUser.uid, transactionData);
+      await refreshUserData();
+      
+      toast({
+        title: "Success",
+        description: "Transaction added successfully",
+      });
+
+      setOpen(false);
+      setTitle('');
+      setAmount('');
+      setCategory('');
+      setDescription('');
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+      toast({
+        title: "Error",
+        description: "Failed to add transaction",
+        variant: "destructive",
+      });
+    }
   };
 
   const categories = getCategories(type);

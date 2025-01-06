@@ -9,6 +9,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { getAuthError } from "@/utils/auth-errors";
 import { PasswordInput } from "@/components/ui/password-input";
+import { saveUserData } from '@/services/database';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export function RegisterForm() {
   const router = useRouter();
@@ -67,16 +70,27 @@ export function RegisterForm() {
     }
 
     try {
-      await register({ email, password });
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
+      // Initialize user data in Firestore
+      await saveUserData(userCredential.user.uid, {
+        tasks: [],
+        finances: {
+          balance: 0,
+          transactions: []
+        },
+        stats: {
+          completedTasks: 0,
+          createdAt: new Date().toISOString()
+        }
+      });
+
       toast({
         title: "Успешна регистрация",
-        description: "Добре дошли в Productiven!",
+        description: "Добре дошли!",
       });
-      
-      setTimeout(() => {
-        router.replace('/dashboard');
-      }, 100);
+
+      router.push('/dashboard');
     } catch (error: any) {
       const errorMessage = getAuthError(error);
       

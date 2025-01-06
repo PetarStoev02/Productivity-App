@@ -3,13 +3,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Cell, Pie, PieChart, ResponsiveContainer, Legend, Tooltip } from "recharts";
 import { useFinances } from "@/hooks/useFinances";
+import { useUser } from '@/contexts/UserContext';
+import { useEffect, useState } from 'react';
 
 const COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 
                'hsl(var(--chart-4))', 'hsl(var(--chart-5))'];
 
 export function ExpenseChart() {
-  const { transactions, formatAmount } = useFinances();
-  
+  const { userData } = useUser();
+  const { formatAmount } = useFinances();
+  const [transactions, setTransactions] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (userData?.finances?.transactions) {
+      setTransactions(userData.finances.transactions);
+    }
+  }, [userData]);
+
   const expensesByCategory = transactions
     .filter(t => t.type === 'expense')
     .reduce((acc, curr) => {

@@ -4,10 +4,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, TrendingUp, TrendingDown, Wallet } from "lucide-react";
 import { useFinances } from "@/hooks/useFinances";
 import { CurrencyToggle } from "./CurrencyToggle";
+import { useUser } from '@/contexts/UserContext';
+
+interface UserData {
+  finances?: {
+    balance: number;
+    transactions: any[];
+  };
+}
+
+interface Props {
+  userData: UserData | null;
+}
 
 export function FinanceOverview() {
+  const { userData } = useUser();
   const { getBalance, getMonthlyStats, formatAmount } = useFinances();
-  const balance = getBalance();
+  const balance = userData?.finances?.balance || 0;
   const { income, expenses, savingsRate } = getMonthlyStats();
 
   return (

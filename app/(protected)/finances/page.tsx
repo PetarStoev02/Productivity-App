@@ -1,10 +1,13 @@
 "use client";
 
+import { useUser } from '@/contexts/UserContext';
 import { FinanceOverview } from "@/components/finances/FinanceOverview";
 import { TransactionList } from "@/components/finances/TransactionList";
 import { ExpenseChart } from "@/components/finances/ExpenseChart";
 
 export default function FinancesPage() {
+  const { userData } = useUser();
+
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Finance Tracker</h1>

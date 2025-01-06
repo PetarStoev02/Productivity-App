@@ -7,6 +7,7 @@ import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { DashboardNavbar } from "@/components/layout/DashboardNavbar";
 import { LandingNavbar } from "@/components/layout/LandingNavbar";
 import { Footer } from "@/components/layout/Footer";
+import { UserProvider } from '@/contexts/UserContext';
 
 const PUBLIC_PATHS = ["/", "/login", "/register"];
 import { AuthProvider } from "@/providers/AuthProvider";
@@ -27,23 +28,25 @@ export default function RootLayout({
       <body>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            {isPublicPath ? (
-              <div className="flex min-h-screen flex-col">
-                {pathname === "/" ? <LandingNavbar /> : <PublicNavbar />}
-                <main className="flex-1">{children}</main>
-                {pathname === "/" && <Footer />}
-              </div>
-            ) : (
-              <main className="h-screen w-screen overflow-hidden">
-                <div className="flex flex-col h-full">
-                  <DashboardNavbar />
-                  <div className="flex flex-1 overflow-hidden">
-                    <Sidebar />
-                    <div className="flex-1 overflow-auto px-20">{children}</div>
-                  </div>
+            <UserProvider>
+              {isPublicPath ? (
+                <div className="flex min-h-screen flex-col">
+                  {pathname === "/" ? <LandingNavbar /> : <PublicNavbar />}
+                  <main className="flex-1">{children}</main>
+                  {pathname === "/" && <Footer />}
                 </div>
-              </main>
-            )}
+              ) : (
+                <main className="h-screen w-screen overflow-hidden">
+                  <div className="flex flex-col h-full">
+                    <DashboardNavbar />
+                    <div className="flex flex-1 overflow-hidden">
+                      <Sidebar />
+                      <div className="flex-1 overflow-auto px-20">{children}</div>
+                    </div>
+                  </div>
+                </main>
+              )}
+            </UserProvider>
           </AuthProvider>
         </QueryClientProvider>
       </body>

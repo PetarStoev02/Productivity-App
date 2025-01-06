@@ -9,6 +9,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { getAuthError } from "@/utils/auth-errors";
 import { PasswordInput } from "@/components/ui/password-input";
+import { getUserData } from '@/services/database';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { useUser } from '@/contexts/UserContext';
 
 export function LoginForm() {
   const router = useRouter();
@@ -18,6 +22,7 @@ export function LoginForm() {
     email: "",
     password: "",
   });
+  const { refreshUserData } = useUser();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,16 +53,9 @@ export function LoginForm() {
     }
 
     try {
-      await login({ email, password });
-      
-      toast({
-        title: "Успешен вход",
-        description: "Добре дошли отново!",
-      });
-      
-      setTimeout(() => {
-        router.replace('/dashboard');
-      }, 100);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      await refreshUserData();
+      router.replace('/dashboard');
     } catch (error: any) {
       const errorMessage = getAuthError(error);
       

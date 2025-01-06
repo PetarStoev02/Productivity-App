@@ -1,13 +1,27 @@
 export type Currency = 'BGN' | 'EUR';
 
+export interface UserData {
+  finances?: {
+    balance: number;
+    transactions: Transaction[];
+  };
+  stats?: {
+    completedTasks: number;
+    createdAt: string;
+  };
+}
+
 export interface Transaction {
   id: string;
   title: string;
   amount: number;
   type: 'income' | 'expense';
   category: string;
+  description: string;
   date: string;
 }
+
+export type NewTransaction = Omit<Transaction, 'id'>;
 
 export interface Category {
   id: string;

@@ -35,7 +35,7 @@ export function useFinances() {
     return `${amount.toFixed(2)} ${CURRENCY_SYMBOLS[currency]}`;
   };
 
-  const addTransaction = (transaction: Omit<Transaction, 'id'>) => {
+  const addTransaction = (transaction: Transaction) => {
     const newTransaction = {
       ...transaction,
       id: crypto.randomUUID(),

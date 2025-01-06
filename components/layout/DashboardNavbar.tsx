@@ -7,10 +7,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from '@/contexts/UserContext';
+
 export function DashboardNavbar() {
   const { logout } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const { userData } = useUser();
 
   const handleLogout = async () => {
     try {
@@ -52,6 +55,8 @@ export function DashboardNavbar() {
           </div>
         </nav>
       </div>
+      <div>Tasks: {userData?.stats?.completedTasks || 0}</div>
+      <div>Balance: ${userData?.finances?.balance || 0}</div>
     </header>
   );
 }

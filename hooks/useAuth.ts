@@ -3,7 +3,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  User,
+  createUserWithEmailAndPassword
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 
@@ -47,10 +48,20 @@ export function useAuth() {
     }
   };
 
+  const register = async ({ email, password }: { email: string; password: string }) => {
+    try {
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   return {
     user,
     loading,
     login,
-    logout
+    logout,
+    register
   };
 } 
