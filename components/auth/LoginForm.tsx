@@ -6,12 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-// import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { getAuthError } from "@/utils/auth-errors";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function LoginForm() {
   const router = useRouter();
   const { toast } = useToast();
-//   const { login } = useAuth();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,12 +27,39 @@ export function LoginForm() {
     e.preventDefault();
     
     try {
-    //   await login(formData);
-      router.push("/dashboard");
-    } catch (error) {
+      const { email, password } = formData;
+      await login({ email, password });
+      
       toast({
-        title: "Грешка",
-        description: "Невалиден имейл или парола",
+        title: "Успешен вход",
+        description: "Добре дошли отново!",
+      });
+      
+      // Add a small delay before navigation
+      setTimeout(() => {
+        router.replace('/dashboard');
+      }, 100);
+    } catch (error: any) {
+      console.error('Login error:', error);
+      let errorMessage;
+      switch (error?.code) {
+        case 'auth/invalid-email':
+          errorMessage = 'Невалиден имейл адрес';
+          break;
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+          errorMessage = 'Невалиден имейл или парола';
+          break;
+        case 'auth/too-many-requests':
+          errorMessage = 'Твърде много опити. Моля, опитайте по-късно';
+          break;
+        default:
+          errorMessage = 'Възникна грешка. Моля, опитайте отново';
+      }
+
+      toast({
+        title: "Грешка при влизане",
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -53,10 +82,9 @@ export function LoginForm() {
 
       <div className="space-y-2">
         <Label htmlFor="password">Парола</Label>
-        <Input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           required
           value={formData.password}
           onChange={handleChange}

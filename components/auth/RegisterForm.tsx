@@ -6,14 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-// import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
+import { getAuthError } from "@/utils/auth-errors";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export function RegisterForm() {
   const router = useRouter();
   const { toast } = useToast();
-//   const { register } = useAuth();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -25,7 +26,7 @@ export function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Грешка",
@@ -36,12 +37,18 @@ export function RegisterForm() {
     }
 
     try {
-    //   await register(formData);
+      await register(formData);
+      toast({
+        title: "Успешна регистрация",
+        description: "Добре дошли в Productiven!",
+      });
       router.push("/dashboard");
-    } catch (error) {
+      router.refresh();
+    } catch (error: any) {
+      const errorMessage = getAuthError(error);
       toast({
         title: "Грешка",
-        description: "Възникна проблем при регистрацията",
+        description: errorMessage,
         variant: "destructive",
       });
     }
@@ -49,18 +56,6 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="name">Име</Label>
-        <Input
-          id="name"
-          name="name"
-          required
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Вашето име"
-        />
-      </div>
-
       <div className="space-y-2">
         <Label htmlFor="email">Имейл</Label>
         <Input
@@ -76,10 +71,9 @@ export function RegisterForm() {
 
       <div className="space-y-2">
         <Label htmlFor="password">Парола</Label>
-        <Input
+        <PasswordInput
           id="password"
           name="password"
-          type="password"
           required
           value={formData.password}
           onChange={handleChange}
@@ -88,10 +82,9 @@ export function RegisterForm() {
 
       <div className="space-y-2">
         <Label htmlFor="confirmPassword">Потвърди парола</Label>
-        <Input
+        <PasswordInput
           id="confirmPassword"
           name="confirmPassword"
-          type="password"
           required
           value={formData.confirmPassword}
           onChange={handleChange}

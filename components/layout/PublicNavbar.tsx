@@ -27,7 +27,7 @@ export function PublicNavbar() {
           </div>
 
           <div className="flex items-center gap-4">
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             <div className="hidden sm:flex items-center gap-2">
               <Button variant="ghost" onClick={() => router.push("/login")}>
                 Sign In
